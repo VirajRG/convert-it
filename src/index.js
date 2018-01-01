@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
-import './css/app.css'
+
 import { Provider } from 'react-redux'
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+import App from './App.jsx';
+import './css/app.css'
 import reducers from './reducers'
 import {connect, clientApiMiddleware, notificationMiddleware} from './reducers/client-api'
 
