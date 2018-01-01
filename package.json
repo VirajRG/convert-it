@@ -8,7 +8,9 @@
     "react-notification-system-redux": "^1.2.0",
     "react-redux": "^5.0.6",
     "react-scripts": "1.0.17",
-    "redux": "^3.7.2",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
     "redux-devtools-extension": "^2.13.2"
   },
   "scripts": {
@@ -16,6 +18,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "sass": "sass --watch src/scss/app.scss:src/css/app.css --style compressed"
+    "scss": "sass --watch src/scss/app.scss:src/css/app.css --style compressed"
   }
 }
