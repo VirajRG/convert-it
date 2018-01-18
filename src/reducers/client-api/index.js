@@ -55,8 +55,11 @@ export const clientApiMiddleware = store => next => action => {
     case CALL:
       api.socket.send(action.payload);
       break;
+
+    default:
+      break;
+
   }
-  if (action.type === CONNECT) { }
 
   return next(action);
 };
