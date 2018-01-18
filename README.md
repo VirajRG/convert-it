@@ -14,7 +14,8 @@ This project is a starter template for react with ant design.
 ## Usage: 
 
 ```
-git clone https://Gyrados@bitbucket.org/spaceupcore/react-template.git
+git clone https://Gyrados@bitbucket.org/spaceupcore/react-ant-template.git
+cd react-ant-template
 git remote set-url origin [url of new project]
 npm install
 npm run sass
