@@ -5,6 +5,8 @@ const CONNECTED = 'client-api-connected';
 const CLOSED = 'client-api-closed';
 const CALL = 'client-api-call';
 
+const FETCH_JSON = 'client-api-fetch-json';
+
 let api = {};
 
 export const connect = (url, retry) => {
@@ -15,6 +17,22 @@ export const call = (event, data) => {
   let req = { event: event, data: data };
   return { type: CALL, payload: JSON.stringify(req) };
 };
+
+export const get = (event, url) => {
+  return { type: FETCH_JSON, method: 'GET', event: event, url: url }
+}
+
+export const post = (event, url, obj) => {
+  return { type: FETCH_JSON, method: 'POST', event: event, url: url, body: JSON.stringify(obj) }
+}
+
+export const put = (event, url, obj) => {
+  return { type: FETCH_JSON, method: 'PUT', event: event, url: url, body: JSON.stringify(obj) }
+}
+
+export const del = (event, url) => {
+  return { type: FETCH_JSON, method: 'DELETE', event: event, url: url }
+}
 
 export const notificationMiddleware = store => next => action => {
   if (action.type.endsWith('-response') && action.data.notify) {
@@ -54,6 +72,26 @@ export const clientApiMiddleware = store => next => action => {
 
     case CALL:
       api.socket.send(action.payload);
+      break;
+
+    case FETCH_JSON:
+      let options = { method: action.method, credentials: 'same-origin' };
+      if (action.method === 'POST' || action.method === 'PUT') {
+        options.body = action.body;
+      }
+
+      fetch(action.url, options)
+        .then((response) => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json()
+          } else {
+            var error = new Error(response.statusText)
+            error.response = response
+            throw error
+          }
+        })
+        .then((data) => { next({ type: action.event, data: data }) })
+        .catch((error) => { console.log('Fetch request failed: ', error); });
       break;
 
     default:
