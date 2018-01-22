@@ -9,6 +9,9 @@ export const createReducer = (name, type, initialState) => {
           switch (action.operation) {
             case 'set':
               return fetchValue(action, 'value')
+
+            case 'logout':
+              return initialState
             default:
               return state
           }
@@ -30,6 +33,9 @@ export const createReducer = (name, type, initialState) => {
             case 'removeByIndex':
               return removeByIndex(state, action)
 
+            case 'logout':
+              return initialState
+
             default:
               return state
           }
@@ -43,6 +49,9 @@ export const createReducer = (name, type, initialState) => {
           switch (action.operation) {
             case 'set':
               return fetchValue(action, 'value')
+
+            case 'logout':
+              return initialState
 
             default:
               return state
@@ -64,6 +73,9 @@ export const createReducer = (name, type, initialState) => {
               return removeByKey(state, action)
             case 'removeByIndex':
               return removeByIndex(state, action)
+
+            case 'logout':
+              return initialState
 
             default:
               return state
