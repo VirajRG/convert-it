@@ -1,3 +1,5 @@
+import history from '../../history'
+import { call, get, post, put, del } from '../client-api'
 export const createReducer = (name, type, initialState) => {
   switch (type) {
     case 'literal':
@@ -153,12 +155,60 @@ const checkCondition = function (operator, operator1, operator2) {
       return false
   }
 }
-  
+
 export const initReducerMiddleware = (config) => {
   return store => next => action => {
     let actions = config[action.type]
     if (actions) {
-      actions.forEach(obj => next(Object.assign({}, obj, { data: action.data })))
+      actions.forEach(obj => {
+        if (obj.type && obj.type.startsWith('---')) {
+          switch (obj.type) {
+            case '---history':
+              if (obj.url) history.push(obj.url)
+              break;
+
+            case '---post':
+              if (!obj.event || !obj.url || !obj.body) {
+                console.log('Reducer middleware: Sufficient params not provided for post');
+                break;
+              }
+              store.dispatch(post(obj.event, obj.url, obj.body))
+
+            case '---put':
+              if (!obj.event || !obj.url || !obj.body) {
+                console.log('Reducer middleware: Sufficient params not provided for put');
+                break;
+              }
+              store.dispatch(put(obj.event, obj.url, obj.body))
+
+            case '---get':
+              if (!obj.event || !obj.url) {
+                console.log('Reducer middleware: Sufficient params not provided for get');
+                break;
+              }
+              store.dispatch(get(obj.event, obj.url))
+
+            case '---del':
+              if (!obj.event || !obj.url) {
+                console.log('Reducer middleware: Sufficient params not provided for del');
+                break;
+              }
+              store.dispatch(del(obj.event, obj.url, obj.body))
+
+            case '---call':
+              if (!obj.event || !obj.data) {
+                console.log('Reducer middleware: Sufficient params not provided for call');
+                break;
+              }
+              store.dispatch(call(obj.event, obj.data))
+            default:
+              break;
+          }
+        }
+        else {
+          next(Object.assign({}, obj, { data: action.data }))
+        }
+      })
     }
     return next(action);
   }
