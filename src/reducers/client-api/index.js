@@ -1,4 +1,4 @@
-import { show } from 'react-notification-system-redux';
+import { notification } from 'antd'
 
 const CONNECT = 'client-api-connect';
 const CONNECTED = 'client-api-connected';
@@ -37,8 +37,7 @@ export const del = (event, url) => {
 export const notificationMiddleware = store => next => action => {
   if (action.type.endsWith('-response') && action.data.notify) {
     let notify = action.data.notify;
-    var opts = { title: notify.title, message: notify.msg };
-    next(show(opts, notify.type));
+    notification[notify.type]({ message: notify.title, description: notify.msg });
   }
   next(action);
 };
